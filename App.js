@@ -5,108 +5,67 @@
  * @format
  * @flow strict-local
  */
-
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+import {View, Text, StyleSheet} from 'react-native';
+import SearchBar from './components/SearchBar.js';
+import PokeBox from './components/PokeBox.js';
+import PokedexList from './components/PokedexList.js';
+import api from './api/getPokemonData';
+import axios from 'axios';
+const App = () => {
+  const [currentPokemon, changePokemon] = useState('pikachu');
+  const [pokemonMap, setPokemonMap] = useState({});
+  const [currentListStart, setListStart] = useState(0);
+  const searchPokemon = name => {
+    api.getSinglePokemon(name, result => {
+      if (result === 'error') {
+        return;
+      }
+      changePokemon(result);
+      console.log('CURRENT MON: ', currentPokemon);
+      console.log('MAP: ', pokemonMap);
+    });
+  };
+  useEffect(() => {
+    api.getKantoPokemon(result => {
+      console.log('FORMATTED RESULT: ', result);
+      result.forEach(pokemon => {
+        api.getSinglePokemon(pokemon.name, pokemonData => {
+          if (pokemonData === 'error') {
+            console.log('COULD NOT SET POKEMON LIST');
+            return;
+          }
+          setPokemonMap(map => {
+            map[pokemonData.id] = pokemonData;
+            return map;
+          });
+        });
+      });
+    });
+  }, []);
+  useEffect(() => {
+    setListStart(0);
+  }, [pokemonMap]);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.app}>
+      <SearchBar searchPokemon={searchPokemon} />
+      <PokeBox pokemon={currentPokemon} />
+      <PokedexList
+        map={pokemonMap}
+        list={Object.keys(pokemonMap)}
+        listStart={currentListStart}
+      />
     </View>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  app: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
-
 export default App;

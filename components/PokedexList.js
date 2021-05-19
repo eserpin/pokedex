@@ -9,15 +9,31 @@ const PokedexList = ({
   listStart,
   rightArrowClick,
   leftArrowClick,
+  cardClick,
 }) => {
   let row1 = list.slice(listStart, listStart + 3);
   let row2 = list.slice(listStart + 3, listStart + 6);
   let row3 = list.slice(listStart + 6, listStart + 9);
   return (
     <View style={styles.pokeList}>
-      <PokedexRow style={styles.pokeRow} map={map} list={row1} />
-      <PokedexRow style={styles.pokeRow} map={map} list={row2} />
-      <PokedexRow style={styles.pokeRow} map={map} list={row3} />
+      <PokedexRow
+        style={styles.pokeRow}
+        map={map}
+        list={row1}
+        cardClick={cardClick}
+      />
+      <PokedexRow
+        style={styles.pokeRow}
+        map={map}
+        list={row2}
+        cardClick={cardClick}
+      />
+      <PokedexRow
+        style={styles.pokeRow}
+        map={map}
+        list={row3}
+        cardClick={cardClick}
+      />
       <Icon.Button name="leftcircle"
         size={30}
         color="red"

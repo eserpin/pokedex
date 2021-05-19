@@ -1,17 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import SearchBar from './components/SearchBar.js';
-import PokeBox from './components/PokeBox.js';
+import PokeModal from './components/PokeModal.js';
 import PokedexList from './components/PokedexList.js';
 import api from './api/getPokemonData';
 import Icon from 'react-native-vector-icons/AntDesign';
 const App = () => {
-  const [currentPokemon, changePokemon] = useState('pikachu');
+  const [currentPokemon, changePokemon] = useState('1');
   const [pokemonMap, setPokemonMap] = useState({});
   const [currentListStart, setListStart] = useState(0);
   const [pokemonIndex, setPokemonIndex] = useState({});
   const [screen, changeScreen] = useState(1);
+  const [modal, setModal] = useState(false);
   const searchPokemon = name => {
     let invalid = (name === '') || (!pokemonIndex[name.toLowerCase()] && !pokemonMap[Number(name)]);
     if (invalid) {
@@ -45,6 +46,10 @@ const App = () => {
       });
     }
   };
+  const cardClick = id => {
+    changePokemon(id);
+    setModal(true);
+  };
   useEffect(() => {
     api.getKantoPokemon(result => {
       result.forEach(pokemon => {
@@ -68,6 +73,13 @@ const App = () => {
   if (screen === 2) {
     return (
       <View style={styles.app}>
+        <PokeModal
+          pokemon={pokemonMap[currentPokemon]}
+          showModal={modal}
+          closeModal={() => {
+            setModal(prev => !prev);
+          }}
+        />
         <SearchBar searchPokemon={searchPokemon} />
         <PokedexList
           map={pokemonMap}
@@ -75,24 +87,16 @@ const App = () => {
           listStart={currentListStart}
           leftArrowClick={leftArrowClick}
           rightArrowClick={rightArrowClick}
+          cardClick={cardClick}
         />
       </View>
     );
   } else {
     return (
-      <View style={styles.app} o>
-        <Text style={styles.enterPage} onPress={() => changeScreen(2)}>
-          Enter Pokédex
-        </Text>
-        <Icon.Button
-          name="login"
-          size={30}
-          color="red"
-          onPress={() => changeScreen(2)}
-          borderRadius={0}
-          backgroundColor="white"
-        />
-      </View>
+      <TouchableOpacity style={styles.app} onPress={() => changeScreen(2)}>
+        <Text style={styles.enterPage}>Enter Pokédex</Text>
+        <Icon name="login" size={30} color="red" />
+      </TouchableOpacity>
     );
   }
 };

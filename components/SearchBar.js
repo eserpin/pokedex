@@ -15,6 +15,7 @@ const SearchBar = ({searchPokemon}) => {
         style={styles.searchBar}
         placeholder="search for a pokémon!"
         value={searchVal}
+        autoCorrect={false}
       />
     </View>
   );

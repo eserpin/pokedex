@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
-const PokedexRow = ({map, list}) => {
+const PokedexRow = ({map, list, cardClick}) => {
   return (
     <View style={styles.pokeRow}>
       {list.map((index, i) => {
         var pokemon = map[index];
         return (
-          <View key={i} style={styles.pokeCard}>
+          <TouchableOpacity key={i} style={styles.pokeCard} onPress={() => cardClick(index)}>
             <Image
               style={styles.pokeImage}
               source={{uri: pokemon.sprites.front_default}}
@@ -24,7 +24,7 @@ const PokedexRow = ({map, list}) => {
                 );
               })}
             </Text>
-          </View>
+          </TouchableOpacity>
         );
       })}
     </View>
@@ -39,13 +39,16 @@ const styles = StyleSheet.create({
     width: 'auto',
   },
   pokeCard: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
     padding: 10,
   },
   pokeImage: {
     width: 50,
     height: 50,
+  },
+  pokeName: {
+    textAlign: 'left',
   },
 });
 export default PokedexRow;

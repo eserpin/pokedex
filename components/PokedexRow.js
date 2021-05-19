@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
     width: 'auto',
   },
   pokeCard: {
-    width: 80,
-    height: 80,
+    width: 90,
+    height: 90,
     padding: 10,
   },
   pokeImage: {

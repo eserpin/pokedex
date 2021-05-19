@@ -2,6 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const PokedexRow = ({map, list, cardClick}) => {
+  const renderCaught = (pokemon) => {
+    if (pokemon.caught) {
+      return <Text>Caught</Text>;
+    } else {
+      return null;
+    }
+  };
   return (
     <View style={styles.pokeRow}>
       {list.map((index, i) => {
@@ -12,6 +19,7 @@ const PokedexRow = ({map, list, cardClick}) => {
               style={styles.pokeImage}
               source={{uri: pokemon.sprites.front_default}}
             />
+            {renderCaught(pokemon)}
             <Text style={styles.pokeName}>{pokemon.name}</Text>
             <Text style={styles.pokeTypeList}>
               {pokemon.types.map((typeObj, i2) => {

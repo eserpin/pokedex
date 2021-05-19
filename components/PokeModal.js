@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Modal, Image, Button} from 'react-native';
 
-const PokeModal = ({pokemon, showModal, closeModal}) => {
+const PokeModal = ({pokemon, showModal, closeModal, addCaught}) => {
   return (
     <Modal style={styles.modal} visible={showModal}>
       <View style={styles.modalCard}>
@@ -51,9 +51,16 @@ const PokeModal = ({pokemon, showModal, closeModal}) => {
               );
             })}
           </View>
+          <Button title="mark as caught"
+            style={styles.catchButton}
+            onPress={() => {
+              console.log(pokemon.id.toString());
+              addCaught(pokemon.id.toString());
+            }}
+          />
+          <Button title="exit" style={styles.modalClose} onPress={closeModal} />
         </View>
       </View>
-      <Button title="exit" style={styles.modalClose} onPress={closeModal} />
     </Modal>
   );
 };

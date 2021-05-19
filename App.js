@@ -50,6 +50,13 @@ const App = () => {
     changePokemon(id);
     setModal(true);
   };
+  const addCaught = id => {
+    setPokemonMap(prev => {
+      let newPokemon =  {...prev[id], caught: true};
+      let newMap = {...prev, [id]: newPokemon};
+      return newMap;
+    });
+  };
   useEffect(() => {
     api.getKantoPokemon(result => {
       result.forEach(pokemon => {
@@ -78,7 +85,9 @@ const App = () => {
           showModal={modal}
           closeModal={() => {
             setModal(prev => !prev);
+            console.log(pokemonMap[currentPokemon.toString()]);
           }}
+          addCaught={addCaught}
         />
         <SearchBar searchPokemon={searchPokemon} />
         <PokedexList

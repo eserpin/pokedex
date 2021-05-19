@@ -15,6 +15,7 @@ const SearchBar = ({searchPokemon}) => {
         style={styles.searchBar}
         placeholder="search for a pokémon!"
         value={searchVal}
+        autoCorrect={false}
       />
     </View>
   );
@@ -22,15 +23,12 @@ const SearchBar = ({searchPokemon}) => {
 
 const styles = StyleSheet.create({
   view: {
-    width: '100%',
-    height: 50,
+    flex: 1,
     backgroundColor: 'white',
     borderRadius: 8,
   },
   searchBar: {
-    width: '100%',
-    height: '100%',
-    paddingLeft: 8,
+    flex: 1,
     fontSize: 16,
     color: 'red',
   },

@@ -8,7 +8,7 @@ const PokeModal = ({pokemon, showModal, closeModal}) => {
         <Image
           style={styles.modalImage}
           source={{
-            uri: `https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png`,
+            uri: pokemon.sprites.versions['generation-v']['black-white'].animated.front_default,
           }}
         />
         <View style={styles.modalInfo}>
